@@ -1,0 +1,4 @@
+The aim was to find the most popular user in a dataset consisting of list of facebook users by user id and their friends by user ids.
+We had to count the number of friends in the mapper. Input key for mapper was user id and friends and output was 
+count of friends and user id.
+The output key for reducer was rank and user id.
