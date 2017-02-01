@@ -1,0 +1,86 @@
+#QUESTION 1 A)
+# Set up problem: maximize
+#	max  T *2.50+P*3.25+M*3.9 subject to
+#	1T+0p+0m>= 50
+#0T+0P+1m>= 50
+#0T+1P + 0m >=150 install.packages('<R-package-file>', repos=NULL)
+#2t+2p-M>=0
+#(-0.7t)+0.3p+0.3m>=0
+#0.5T+0.75P+1.5M<=480
+#1t+1.5p+1.75m <= 480
+
+
+#1b)
+library(lpSolve)
+f.obj <- c(2.5, 3.25, 3.9)
+f.con <- matrix (c(1, 0, 0,0 ,0 ,1 ,0 ,1 ,0 ,2 , 2 ,-1 ,-0.7 ,0.3 ,0.3 ,0.5 ,0.75 , 1.5 , 1, 1.5 ,1.75 ), nrow=7, byrow=TRUE)
+f.dir <- c(">=",">=",">=",">=",">=","<=", "<=")
+f.rhs <- c(50, 50,150,0,0,480,480)
+lp ("max", f.obj, f.con, f.dir, f.rhs,all.int = TRUE)  #profit $1083.2
+
+#question 1 c)
+#updated labor constraint 10t+14P+20M<= 5760
+library(lpSolve)
+f.obj <- c(2.5, 3.25, 3.9)
+f.con <- matrix (c(1, 0, 0,0 ,0 ,1 ,0 ,1 ,0 ,2 , 2 ,-1 ,-0.7 ,0.3 ,0.3 ,10,14,20 ), nrow=6, byrow=TRUE)
+f.dir <- c(">=",">=",">=",">=",">=","<=")
+f.rhs <- c(50, 50,150,0,0,5760)
+lp ("max", f.obj, f.con, f.dir, f.rhs,all.int = TRUE)  #profit $1322.5   profit increased by   $239
+
+
+#QUESTION 3 a)
+# Set up problem: maximize
+#	max(30*BC+ 35*BG+47*MC+90*WL)
+#s.t sales hrs	0.3BC+0.4BG+0.5MC+1WL	<=	1800
+#space	1.25BC+1BG+1.5MC+3WL	<=	18000
+#advert	3BC+2BG+4MC+9WL	<=	15000
+
+library(lpSolve)
+f.obj <- c(30,35,47,90)
+f.con <- matrix (c(0.3 ,0.4 ,0.5 ,1 ,1.25 ,1 ,1.5 ,3 ,3 ,2 , 4 , 9),nrow =3 ,byrow= TRUE)
+f.dir <- c("<=","<=","<=")
+f.rhs <- c(1800 ,18000 ,15000)
+lp ("max", f.obj, f.con, f.dir, f.rhs,all.int = TRUE)  #profit = $172500
+lp ("max", f.obj, f.con, f.dir, f.rhs,all.int = TRUE)$solution    #make 4000 Blue and 1500 Blue green
+lp ("max", f.obj, f.con, f.dir, f.rhs, all.int = TRUE,compute.sens=TRUE)$sens.coef.from
+lp ("max", f.obj, f.con, f.dir, f.rhs, all.int = TRUE,compute.sens=TRUE)$sens.coef.to
+
+#qn3 C)
+
+lp ("max", f.obj, f.con, f.dir, f.rhs,all.int = TRUE ,compute.sens=TRUE)$duals
+lp ("max", f.obj, f.con, f.dir, f.rhs,all.int = TRUE ,compute.sens=TRUE)$duals.from
+lp ("max", f.obj, f.con, f.dir, f.rhs,all.int = TRUE ,compute.sens=TRUE)$duals.to
+
+# from primal solution we see 0.5 decrease is in allowable range and so by decreasing 0.5 from cost of 
+#Blue green shirts we get 1500*(-0.5) = -750. So the total revenue decreased by 750 from original value of 172500 
+#to 171750
+
+
+
+#qn3 D) 
+#for I) since shadow price from dual is 0 for area he will lose 750 $ if he buys the extra space.
+# in II) spending an additional $400 he is getting a profit of 2.5*400= 1000$ and so net profit would be 600$
+# in III)part time salesperson adding 260 hours will give a profit of 75*260=19500$ and after salary of 3600$ he
+#       gets net profit of 15900$
+# surprisingly hiring shawn makes more sense to his business!
+
+
+#qn3E)
+#newcosntraint demand: BC+BG+MC+WL	<=	5000
+library(lpSolve)
+f.obj <- c(30,35,47,90)
+f.con <- matrix (c(0.3 ,0.4 ,0.5 ,1 ,1.25 ,1 ,1.5 ,3 ,3 ,2 , 4 , 9, 1,1,1,1),nrow =4 ,byrow= TRUE)
+f.dir <- c("<=","<=","<=","<=")
+f.rhs <- c(1800 ,18000 ,15000,5000)
+lp ("max", f.obj, f.con, f.dir, f.rhs,all.int = TRUE)
+lp ("max", f.obj, f.con, f.dir, f.rhs,all.int = TRUE)$solution
+
+# after demand constrait The profit is now $172000 which is a decrease of $500 from the original value.
+
+
+
+
+
+
+
+
